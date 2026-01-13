@@ -112,6 +112,7 @@ Mステップのように分布を決定するにはq_1を固定し，q_2を動�
 
   ### 参考文献
   以下に参考にしたサイトおよび書籍を記載する．主に，書籍[3],講義資料[4],コード[6]を参考に実装を行いました．
+  
 [1] Microsoft,"Azure Kinect DK",(URL:https://azure.microsoft.com/ja-jp/products/kinect-dk/?msockid=286607017653682f2561121677ca69fe).accessed:2026/01/13
 
 [2]須山　敦志ら,"ベイズ推論による機械学習入門"，講談社，2017.
