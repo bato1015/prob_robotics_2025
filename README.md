@@ -50,8 +50,8 @@ Mステップのように分布を決定するにはq_1を固定し，q_2を動�
 #### Estep
 - 以下の式に従ってr_ijを決定する．以下の数式の解説は[3]参照
  E_stepの1行目のマハラノビス距離^2である（ x_i - m_j ） ^ T W_j（ x_i - m_j ）は2次形式よりΣ^n (（ x_i - m_j ）_n・ W_inv・（ x_i - m_j ）_n)が導出できるため，実装にはこれを利用した．
-  
-<img width="621" height="181" alt="image" src="https://github.com/user-attachments/assets/ec1738c1-2b07-4e16-a5b6-ed1bf1da6a3e" />
+<img width="646" height="172" alt="image" src="https://github.com/user-attachments/assets/684fa193-6e28-477a-b907-65ef3a088968" />
+
 
 決定したr_ijを用いてMstepへ
 
