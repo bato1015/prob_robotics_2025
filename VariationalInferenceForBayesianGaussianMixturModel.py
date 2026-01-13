@@ -8,7 +8,8 @@ from scipy.special import digamma, logsumexp
 参考:https://nbviewer.org/github/amber-kshz/PRML/blob/master/notebooks/Ch10_Variational_Inference_for_Gaussian_Mixture_Model.ipynb
 """
 
-
+path = ["216","219"]
+p=1
 def gaussian_ellipse_points(mean, cov, n_std=2.0, num_points=100):
 
     #固有値分解
@@ -55,7 +56,7 @@ def mean_point_cloud(m_k):
 
 
 
-pcd = o3d.io.read_point_cloud("1109_ver0_0_4_219westimate_bo_x_z.pcd")
+pcd = o3d.io.read_point_cloud("1109_ver0_0_4_"+path[p]+"westimate_bo_x_z.pcd")
 points_3d = np.asarray(pcd.points)
 points_xz = points_3d[:, [0, 2]]
 geoms = []
@@ -68,7 +69,6 @@ N,D = points_xz.shape
 K= Cluster
 X=points_xz
 seed =42
-epsilon = 1e-12
 
 alpha_0 = 0.003 #事前分布の信頼度(学習を進めると高まるため、初期は小さく)
 beta_0 = 0.9 #事前分布の精度を決定するパラメータbeta>0 https://en.wikipedia.org/wiki/Normal-Wishart_distribution?utm_source=chatgpt.com
@@ -225,7 +225,7 @@ for k in range(Cluster):
 geoms.append(mean_point_cloud(m))
 
 #真値
-pcd_true = o3d.io.read_point_cloud("1109_ver0_0_4_219westimate_bo3.pcd")
+pcd_true = o3d.io.read_point_cloud("1109_ver0_0_4_"+path[p]+"westimate_bo3.pcd")
 pcd_trues = np.asarray(pcd_true.points)
 pcd_true.paint_uniform_color([1, 0, 1])
 geoms.append(pcd_true)
