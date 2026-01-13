@@ -92,16 +92,34 @@ Mステップのように分布を決定するにはq_1を固定し，q_2を動�
 点iは上記の2つの判定を同時に満たす場合，ノイズ点として除去される．
 
 ## システムの実行と結果
+本課題では，ノイズ少ないデータ（p=0）とノイズが多いデータ(p=1)の2つを用意し，検証を行い，結果は以下のようになった．
+
+画像内の赤色の点群がノイズ点と判定された点，青色が残った点群，緑色の点が変分推論により求めたmの座標，ピンク色の点が実際に計測した計測点を示す．
+特に図2ののようなノイズが多いデータでは，距離ベースのクラスタリングで邪魔となるノイズを削除できたことがわかった．
+
+図1 ノイズが少ないデータ
+<img width="1014" height="952" alt="image" src="https://github.com/user-attachments/assets/06a5c5ec-a46e-419f-a11a-80583069812d" />
+
+図2 ノイズが多いデータ
+<img width="947" height="984" alt="image" src="https://github.com/user-attachments/assets/5eb7b550-7924-4499-a887-a50355ba22fc" />
+
+
+## LLMの利用について
+本課題では，変分推論のアルゴリズムの実装がメインであったため
+ノイズ除去の判定法・描画・初期値のパラメータ設定はChat GPTまたは，Geminiを利用した．
 
 
 
   ### 参考文献
-[1] Microsoft,"Azure Kinect DK",(URL:https://azure.microsoft.com/ja-jp/products/kinect-dk/?msockid=286607017653682f2561121677ca69fe).access:2026/01/13
+  以下に参考にしたサイトおよび書籍を記載する．主に，書籍[3],講義資料[4],コード[6]を参考に実装を行いました．
+[1] Microsoft,"Azure Kinect DK",(URL:https://azure.microsoft.com/ja-jp/products/kinect-dk/?msockid=286607017653682f2561121677ca69fe).accessed:2026/01/13
 
 [2]須山　敦志ら,"ベイズ推論による機械学習入門"，講談社，2017.
 
 [3]上田 隆一,"ロボットの確率・統計～製作・競技・知能研究で役立つ考え方と計算法"，コロナ社，2024
 
-[4]ryuichiueda,"確率ロボティクス第8回: 機械学習（その2）",github,(URL:https://ryuichiueda.github.io/slides_marp/prob_robotics_2025/lesson8-2.html),access:2026/01/14
+[4]ryuichiueda,"確率ロボティクス第8回: 機械学習（その2）",github,(URL:https://ryuichiueda.github.io/slides_marp/prob_robotics_2025/lesson8-2.html),accessed:2026/01/14
 
-[5]zuka,"【徹底解説】変分ベイズをはじめからていねいに",Academaid,(URL:https://academ-aid.com/ml/vb)
+[5]zuka,"【徹底解説】変分ベイズをはじめからていねいに",Academaid,(URL:https://academ-aid.com/ml/vb),accessed:2026/01/14
+
+[6]amber-kshz,"Variational inference for Bayesian Gaussian mixture models",(URL:https://github.com/amber-kshz/PRML),accessed:2026/01/14
