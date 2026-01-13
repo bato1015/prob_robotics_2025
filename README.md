@@ -7,12 +7,18 @@
   Kinectからの計測データには，計測誤差やセンサノイズが含まれている．本課題で使用するエッジの点群データは距離ベースのクラスタリングを用いたエッジ間隔でパラメータ推定を行う．
   しかし距離ベースの手法は，ノイズの影響を受けやすく，前処理としてノイズ除去を行うことが望ましい．ノイズを含むデータに対して，EM法やk-means法は，分布の形状やクラスタリング数を事前に仮定する必要があるため適応が難しい．そこで本課題では，変分推論に基づくベイズ混合ガウスモデルを用い，ノイズ除去システムを構築する．
   ### 変分推論を用いたベイズ混合ガウスモデル
-変分推論(Variational Inference)とは，解析的に計算できない未知の確率分布 $p(\boldsymbol{X}|D)$ を知るために，計算しやすい簡単な式を使って周辺化計算を近似的に実行する方法である．ここで $\boldsymbol{X}$ は観測されてない未知の変数を示し，$D$ は観測データを示す．変分推論の他にもラプラス近似や期待値伝搬などがあげられる[2]．混合ガウス分布において未知のパラメータとなり決定したいのは，分布に関する事後分布 $p(\boldsymbol{\pi},\boldsymbol{\mu}_{1:K},\boldsymbol{\Lambda}_{1:K},k_{1:N}|\boldsymbol{x}_{1:N})$ と分布を決定する分布の事後分布 $p(r_{ij},\boldsymbol{m}_j,\beta_{j},W_{j},\nu_{j},a_j)$ である[3]．ここで，$i$ はデータの数($i= 0,1,2 \dots N$)，$j$ はガウス分布の数($j= 0,1,2 \dots K$)，$\boldsymbol{\pi}$ はクラスタにデータがいる確率，$\boldsymbol{\mu}_{1:K}$ は分布の平均値，$\boldsymbol{\Lambda}_{1:K}$ は精度行列，$k$ はクラスタ数，$r_{ij}$ は $i$ 番目のデータ $x_i$ が $j$ 番目のクラスタに所属する確率分布，$\boldsymbol{m}_j$ は分布の分布の中心，$W_{j},\beta_{j},\nu_{j}$ は精度行列 $\boldsymbol{\Lambda}_{j}$ を決定するウィシャート分布 $W$ とそのパラメータ，$a_j$ は $\boldsymbol{\pi}_{1:K}$ を示す[4]．
+変分推論(Variational Inference)とは，解析的に計算できない未知の確率分布 $p(\boldsymbol{X}|D)$ を知るために，計算しやすい簡単な式を使って周辺化計算を近似的に実行する方法である．ここで, $\boldsymbol{X}$ は観測されてない未知の変数を示し, $D$ は観測データを示す．変分推論の他にもラプラス近似や期待値伝搬などがあげられる[2]．混合ガウス分布において未知のパラメータとなり決定したいのは,分布に関する事後分布 
 
+$$p(\boldsymbol{\pi},\boldsymbol{\mu}\_{1:K},\mathbf{\Lambda}\_{1:K},k\_{1:N}|\boldsymbol{x}\_{1:N})$$  
 
-  
+と分布を決定する分布の事後分布
+
+$$p(r_{ij},\boldsymbol{m}_j,\beta_{j},W_{j},\nu_{j},a_j)$$
+
+ここでiはデータの数($i= 0,1,2 \dots N$),jはガウス分布の数($j= 0,1,2 \dots K$)，piはクラスタにデータがいる確率，mu_1:Kは分布の平均値Lambda_1:Kは精度行列，kはクラスタ数， r_ijは i番目のデータ x_i がj番目のクラスタに所属する確率分布，m_j$は分布の分布の中心，W_j,beta_j,nu_j は精度行列 Lambdaを決定するウィシャート分布 W とそのパラメータ，a_jは pi_1:Kを示す[4]．
+
   ### 参考文献
-  [1] Microsoft,"Azure Kinect DK",(URL:https://azure.microsoft.com/ja-jp/products/kinect-dk/?msockid=286607017653682f2561121677ca69fe).access:2026/01/13
+[1] Microsoft,"Azure Kinect DK",(URL:https://azure.microsoft.com/ja-jp/products/kinect-dk/?msockid=286607017653682f2561121677ca69fe).access:2026/01/13
 [2]須山　敦志ら,"ベイズ推論による機械学習入門"，講談社，2017.
 [3]上田 隆一,"ロボットの確率・統計～製作・競技・知能研究で役立つ考え方と計算法"，コロナ社，2024
 [4]ryuichiueda,"確率ロボティクス第8回: 機械学習（その2）",github,(URL:https://ryuichiueda.github.io/slides_marp/prob_robotics_2025/lesson8-2.html),access:2026/01/14
