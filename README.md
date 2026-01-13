@@ -11,7 +11,7 @@
   ### 変分推論を用いたベイズ混合ガウスモデル
 変分推論(Variational Inference)とは，解析的に計算できない未知の確率分布 $p(\boldsymbol{X}|D)$ を知るために，計算しやすい簡単な式を使って周辺化計算を近似的に実行する方法である．ここで, $\boldsymbol{X}$ は観測されてない未知の変数を示し, $D$ は観測データを示す．変分推論の他にもラプラス近似や期待値伝搬などがあげられる[2]．混合ガウス分布において未知のパラメータとなり決定したいのは,分布に関する事後分布 
 
-$$p(\boldsymbol{\pi},\boldsymbol{\mu}\_{1:K},\mathbf{\Lambda}\_{1:K},k\_{1:N}|\boldsymbol{x}\_{1:N})$$  
+$$p(\boldsymbol{\pi},\boldsymbol{\mu}_{1:K},\mathbf{\Lambda}_{1:K},k_{1:N}|\boldsymbol{x}_{1:N})$$  
 
 と分布を決定する分布の事後分布
 
@@ -19,8 +19,44 @@ $$p(r_{ij},\boldsymbol{m}_j,\beta_{j},W_{j},\nu_{j},\alpha_j)$$
 
 ここでiはデータの数($i= 0,1,2 \dots N$), j はガウス分布の数($ j= 0,1,2 ... K$)， pi はクラスタにデータがいる確率， nu_1:K は分布の平均値 Lambda_1:K は精度行列, k はクラスタ数， r_ij は i 番目のデータ x_i が j 番目のクラスタに所属する確率分布，m_j は分布の分布の中心，W_j , beta_j , nu_j は精度行列 Lambda_j を決定するウィシャート分布 の基準行列とそのパラメータ，alpha_j は pi_1:K を示す[4]．
 
+### 変分推論のアルゴリズム[4]
+変分推論の解法の一つにEM法に似たアプローチで分布の決定を行う手法がある．
+これはパラメータ群同士が独立していると仮定し，以下の式のように2つの分布の積で構成される近似の分布qを作成する．
+
+$$q(\pi_{1:K},\boldsymbol{\mu}_{1:K}, \Lambda_{1:K}, k_{1:N}) = q_1(k_{1:N})q_2(\pi_{1:K},\boldsymbol{\mu}_{1:K}, \Lambda_{1:K})$$
+
+
+この式を用いて，一つのパラメータ群を固定し，片一方を計算という処理を繰り返してパラメータを決定する．
+Mステップのように分布を決定するにはq_1を固定し，q_2を動かし，Eステップのように分布の信頼度を決定するにはq_2を固定し，q_1を動かす．
+下記に各ステップの具体的なアルゴリズムを示す．
+
+#### 初期値を決定
+#### Mstep
+- 以下の式に従って事後分布m_1:K, beta_1:K, W_1:K, nu_1:K, alpha_1:Kを決定する．以下の数式の解説は[3]参照
+  
+  $$N_j = \sum_{i=1}^N r_{ij}\qquad\qquad$$
+
+  $$\bar{\boldsymbol{x}}j = \dfrac{1}{N_j} \sum_{i=1}^N r_{ij}\boldsymbol{x}_i\\quad$$
+  
+  $$\Sigma_j = \dfrac{1}{N_j} \sum_{i=1}^N r_{ij}(\boldsymbol{x}_i - \bar{\boldsymbol{x}}_j)(\boldsymbol{x}_i - \bar{\boldsymbol{x}}_j)^\top$$
+  
+  $$\alpha_j, \beta_j, \nu_j) =(\alpha_j', \beta_j', \nu_j') + (N_j, N_j, N_j)$$
+  
+  $$\boldsymbol{m}_j = (\beta_j' \boldsymbol{m}_j' + N_j \bar{\boldsymbol{x}}_j ) /\beta_j\qquad\qquad\qquad$$
+  
+  $$W^{-1}_j = W'^{-1}_j + N_j \Sigma_j + \dfrac{\beta'_j N_j}{\beta'_j+ N_j} (\bar{\boldsymbol{x}}_j - \boldsymbol{m}_j')(\bar{\boldsymbol{x}}_j - \boldsymbol{m}_j')^\top$$
+
+
+#### Estep
+- 以下の式に従ってr_ijを決定する．以下の数式の解説は[3]参照
+ E_stepの1行目のマハラノビス距離^2である（ x_i - m_j ） ^ T W_j（ x_i - m_j ）は2次形式よりΣ^n (（ x_i - m_j ）_n・ W_inv・（ x_i - m_j ）_n)が導出できるため，実装にはこれを利用した．
+  
+<img width="621" height="181" alt="image" src="https://github.com/user-attachments/assets/ec1738c1-2b07-4e16-a5b6-ed1bf1da6a3e" />
+
+決定したr_ijを用いてMstepへ
+
 ### 対応するパラメータ
-以下が使用したパラメータです．本講義では，2次元の点群データを対象としているためD=2となる．N1は点群数に対応し，Kはノイズとエッジのクラスタリング数を示す．
+以下が使用したパラメータである．本講義では，2次元の点群データを対象としているためD=2となる．Nは点群数に対応し，Kはノイズとエッジのクラスタリング数を示す．説明は[5]のサイトを参考にした．
 | Variable name | Description | Shape |
 |--------------|------------|-------|
 | `X` | points | `(N, D)` |
@@ -32,18 +68,25 @@ $$p(r_{ij},\boldsymbol{m}_j,\beta_{j},W_{j},\nu_{j},\alpha_j)$$
 | `beta_0` | Prior precision of mean | scalar |
 | `m_0` | Prior mean vector | `(D,)` |
 | `nu_0` | Prior wishart parameter| scalar |
-| `W_0` | Prior precision matrix | `(D, D)` |
+| `W_0` | Prior wishart parameter| `(D, D)` |
 | `W_0_inv` | Inverse of prior precision matrix | `(D, D)` |
 | `alpha` | Posterior Dirichlet parameter | `(K,)` |
 | `beta` | Posterior precision of mean | `(K,)` |
 | `m` | Posterior mean vectors | `(K, D)` |
 | `nu` | Posterior wishart parameter | `(K,)` |
-| `W_inv` | Posterior precision matrices | `(K, D, D)` |
+| `W_inv` | Posterior wishart parameter | `(K, D, D)` |
+
+###　ノイズの判定式
+
 
 
   ### 参考文献
 [1] Microsoft,"Azure Kinect DK",(URL:https://azure.microsoft.com/ja-jp/products/kinect-dk/?msockid=286607017653682f2561121677ca69fe).access:2026/01/13
+
 [2]須山　敦志ら,"ベイズ推論による機械学習入門"，講談社，2017.
+
 [3]上田 隆一,"ロボットの確率・統計～製作・競技・知能研究で役立つ考え方と計算法"，コロナ社，2024
+
 [4]ryuichiueda,"確率ロボティクス第8回: 機械学習（その2）",github,(URL:https://ryuichiueda.github.io/slides_marp/prob_robotics_2025/lesson8-2.html),access:2026/01/14
 
+[5]zuka,"【徹底解説】変分ベイズをはじめからていねいに",Academaid,(URL:https://academ-aid.com/ml/vb)
