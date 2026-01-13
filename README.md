@@ -17,23 +17,29 @@ $$p(\boldsymbol{\pi},\boldsymbol{\mu}\_{1:K},\mathbf{\Lambda}\_{1:K},k\_{1:N}|\b
 
 $$p(r_{ij},\boldsymbol{m}_j,\beta_{j},W_{j},\nu_{j},\alpha_j)$$
 
-ここでiはデータの数($i= 0,1,2 \dots N$), j はガウス分布の数($ j= 0,1,2 ... K$)， pi はクラスタにデータがいる確率， mu_1:K は分布の平均値 Lambda_1:K は精度行列, k はクラスタ数， r_ij は i 番目のデータ x_i が j 番目のクラスタに所属する確率分布，m_j は分布の分布の中心，W_j , beta_j , nu_j は精度行列 Lambda_j を決定するウィシャート分布 W とそのパラメータ，alpha_j は pi_1:K を示す[4]．
+ここでiはデータの数($i= 0,1,2 \dots N$), j はガウス分布の数($ j= 0,1,2 ... K$)， pi はクラスタにデータがいる確率， nu_1:K は分布の平均値 Lambda_1:K は精度行列, k はクラスタ数， r_ij は i 番目のデータ x_i が j 番目のクラスタに所属する確率分布，m_j は分布の分布の中心，W_j , beta_j , nu_j は精度行列 Lambda_j を決定するウィシャート分布 の基準行列とそのパラメータ，alpha_j は pi_1:K を示す[4]．
 
 ### 対応するパラメータ
 以下が使用したパラメータです．本講義では，2次元の点群データを対象としているためD=2となる．N1は点群数に対応し，Kはノイズとエッジのクラスタリング数を示す．
 | Variable name | Description | Shape |
 |--------------|------------|-------|
-| `alpha_0` | Dirichlet prior parameter | `(K,)` |
+| `X` | points | `(N, D)` |
+| `r` | Responsibility  | `(N, K)` |
+| `N_sum` |Weighted count of data| `(K,)` |
+| `x_ave` |  Weighted responsibility mean of data | `(K, D)` |
+| `S` | weighted responsibility covariance matrices | `(K, D, D)` |
+| `alpha_0` | Dirichlet prior parameter | scalar |
 | `beta_0` | Prior precision of mean | scalar |
 | `m_0` | Prior mean vector | `(D,)` |
-| `nu_0` | Prior degrees of freedom (Wishart) | scalar |
-| `W_0_inv` | Prior scale matrix (inverse) | `(D, D)` |
+| `nu_0` | Prior wishart parameter| scalar |
+| `W_0` | Prior precision matrix | `(D, D)` |
+| `W_0_inv` | Inverse of prior precision matrix | `(D, D)` |
 | `alpha` | Posterior Dirichlet parameter | `(K,)` |
 | `beta` | Posterior precision of mean | `(K,)` |
 | `m` | Posterior mean vectors | `(K, D)` |
-| `nu` | Posterior degrees of freedom | `(K,)` |
-| `W_inv` | Posterior scale matrices (inverse) | `(K, D, D)` |
-| `r` | Responsibility (cluster assignment probability) | `(N, K)` |
+| `nu` | Posterior wishart parameter | `(K,)` |
+| `W_inv` | Posterior precision matrices | `(K, D, D)` |
+
 
   ### 参考文献
 [1] Microsoft,"Azure Kinect DK",(URL:https://azure.microsoft.com/ja-jp/products/kinect-dk/?msockid=286607017653682f2561121677ca69fe).access:2026/01/13
