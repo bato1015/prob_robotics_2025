@@ -9,7 +9,7 @@ from scipy.special import digamma, logsumexp
 """
 
 path = ["216","219"]
-p=1
+p=0
 def gaussian_ellipse_points(mean, cov, n_std=2.0, num_points=100):
 
     #固有値分解
@@ -98,13 +98,13 @@ for q in range(400):
     N_sum = r.sum(axis=0) 
 
     #分布重みつき平均
-    x_ave = r.T @ X /  N_sum[:, None]
+    x_ave = r.T @ X / N_sum[:, None]
 
 
     S =  np.zeros((K, D, D))
-    for i in  range(K):
-        S_1 = np.cov(X, rowvar=False, aweights=r[:, i], bias=True)
-        S[i] =  S_1
+    for j in  range(K):
+        S_1 = np.cov(X, rowvar=False, aweights=r[:, j], bias=True)
+        S[j] =  S_1
 
     alpha = alpha_0 + N_sum
     beta = beta_0 + N_sum
@@ -112,21 +112,21 @@ for q in range(400):
     #nuの中心の調整
     m = (beta_0*m_0 + N_sum[:,None]*x_ave)/beta[:,None]
 
-    #各ガウス分布の共分散行列の調整
+    #各ガウス分布の共分散行列の調整S
     W_inv = np.zeros((K, D, D))
-    for i in range(K):
-        m_diff = (x_ave[i] - m_0)[:,None]
+    for j in range(K):
+        m_diff = (x_ave[j] - m_0)[:,None]
         #print((m_diff@m_diff.T).shape)
-        W = W_0_inv+ N_sum[i]*S[i]+((beta_0 * N_sum[i])/(beta_0+N_sum[i]))*(m_diff@m_diff.T)
-        W_inv[i] = np.linalg.inv(W)
+        W = W_0_inv+ N_sum[j]*S[j]+((beta_0 * N_sum[j])/(beta_0+N_sum[j]))*(m_diff@m_diff.T)
+        W_inv[j] = np.linalg.inv(W)
 
 
     #Eステップ　rを求めたい
     pho = []
     pho_1=  np.zeros((N, K))
     pho_2 = np.zeros(K)
-    for i in range(K):
-        diff = X - m[i]
+    for j in range(K):
+        diff = X - m[j]
 
         #これが遅すぎて無理!
         # pho1 = np.zeros(N)
@@ -138,16 +138,16 @@ for q in range(400):
         #diff(点群数，次元数)
         #W_inv[i](次元数,次元数)
         
-        pho1 = np.einsum('nd,dd,nd->n', diff, W_inv[i], diff) #二次形式の公式
+        pho1 = np.einsum('nd,dd,nd->n', diff, W_inv[j], diff) #二次形式の公式
 
-        pho = (D / beta[i]) + nu[i] * pho1
+        pho = (D / beta[j]) + nu[j] * pho1
 
-        pho_1[:, i] = -0.5*pho #1行目
+        pho_1[:, j] = -0.5*pho #1行目
         psi_sum = 0.0
         for h in range(1, D + 1):
-            psi_sum += digamma((nu[i]+1.0-h)/2.0)
-        logdat = np.log(np.linalg.det(W_inv[i])) 
-        pho_2[i] =0.5*psi_sum + 0.5*logdat#2行目
+            psi_sum += digamma((nu[j]+1.0-h)/2.0)
+        logdat = np.log(np.linalg.det(W_inv[j])) 
+        pho_2[j] =0.5*psi_sum + 0.5*logdat#2行目
 
     pho_3 = -0.5*(D*np.log(2.0)) #これがetaかな?
     pho_4 = digamma(alpha)-digamma(alpha.sum()) #3行目
