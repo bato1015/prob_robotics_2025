@@ -15,7 +15,7 @@ $$p(\boldsymbol{\pi},\boldsymbol{\mu}\_{1:K},\mathbf{\Lambda}\_{1:K},k\_{1:N}|\b
 
 $$p(r_{ij},\boldsymbol{m}_j,\beta_{j},W_{j},\nu_{j},a_j)$$
 
-ここでiはデータの数($i= 0,1,2 \dots N$), j はガウス分布の数($ j= 0,1,2 \dots K$)， pi はクラスタにデータがいる確率， mu_1:K は分布の平均値 Lambda_1:K は精度行列, k はクラスタ数， r_ij は i 番目のデータ x_i が j 番目のクラスタに所属する確率分布，m_j は分布の分布の中心，W_j , beta_j , nu_j は精度行列 Lambda_j を決定するウィシャート分布 W とそのパラメータ，a_j は pi_1:K を示す[4]．
+ここでiはデータの数($i= 0,1,2 \dots N$), j はガウス分布の数($ j= 0,1,2 ... K$)， pi はクラスタにデータがいる確率， mu_1:K は分布の平均値 Lambda_1:K は精度行列, k はクラスタ数， r_ij は i 番目のデータ x_i が j 番目のクラスタに所属する確率分布，m_j は分布の分布の中心，W_j , beta_j , nu_j は精度行列 Lambda_j を決定するウィシャート分布 W とそのパラメータ，a_j は pi_1:K を示す[4]．
 
 
   ### 参考文献
