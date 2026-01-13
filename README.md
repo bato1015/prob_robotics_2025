@@ -1,7 +1,9 @@
 ## 確率ロボティクスの課題提出場所
   ### 変分推論を用いたノイズ除去システム
 本課題では，以下の条件で取得した 2 次元点群データを用い，変分推論に基づくベイズ混合ガウスモデルによるノイズ除去システムを構築した．
-・点群データは Microsoft 社製の Azure Kinect DK［1］を用いて計測し，計測結果からエッジ部分を抽出した点群を対象とした．　　
+
+・点群データは Microsoft 社製の Azure Kinect DK［1］を用いて計測し，計測結果からエッジ部分を抽出した点群を対象とした
+
 ・単視点からの計測ではオクルージョンが多く発生するため，奥行き方向である y 軸を除外し，x–z 平面上の 2 次元点群として処理を行った．
   ### 背景と目的
   Kinectからの計測データには，計測誤差やセンサノイズが含まれている．本課題で使用するエッジの点群データは距離ベースのクラスタリングを用いたエッジ間隔でパラメータ推定を行う．
@@ -13,10 +15,25 @@ $$p(\boldsymbol{\pi},\boldsymbol{\mu}\_{1:K},\mathbf{\Lambda}\_{1:K},k\_{1:N}|\b
 
 と分布を決定する分布の事後分布
 
-$$p(r_{ij},\boldsymbol{m}_j,\beta_{j},W_{j},\nu_{j},a_j)$$
+$$p(r_{ij},\boldsymbol{m}_j,\beta_{j},W_{j},\nu_{j},\alpha_j)$$
 
-ここでiはデータの数($i= 0,1,2 \dots N$), j はガウス分布の数($ j= 0,1,2 ... K$)， pi はクラスタにデータがいる確率， mu_1:K は分布の平均値 Lambda_1:K は精度行列, k はクラスタ数， r_ij は i 番目のデータ x_i が j 番目のクラスタに所属する確率分布，m_j は分布の分布の中心，W_j , beta_j , nu_j は精度行列 Lambda_j を決定するウィシャート分布 W とそのパラメータ，a_j は pi_1:K を示す[4]．
+ここでiはデータの数($i= 0,1,2 \dots N$), j はガウス分布の数($ j= 0,1,2 ... K$)， pi はクラスタにデータがいる確率， mu_1:K は分布の平均値 Lambda_1:K は精度行列, k はクラスタ数， r_ij は i 番目のデータ x_i が j 番目のクラスタに所属する確率分布，m_j は分布の分布の中心，W_j , beta_j , nu_j は精度行列 Lambda_j を決定するウィシャート分布 W とそのパラメータ，alpha_j は pi_1:K を示す[4]．
 
+### 対応するパラメータ
+以下が使用したパラメータです．本講義では，2次元の点群データを対象としているためD=2となる．N1は点群数に対応し，Kはノイズとエッジのクラスタリング数を示す．
+| Variable name | Description | Shape |
+|--------------|------------|-------|
+| `alpha_0` | Dirichlet prior parameter | `(K,)` |
+| `beta_0` | Prior precision of mean | scalar |
+| `m_0` | Prior mean vector | `(D,)` |
+| `nu_0` | Prior degrees of freedom (Wishart) | scalar |
+| `W_0_inv` | Prior scale matrix (inverse) | `(D, D)` |
+| `alpha` | Posterior Dirichlet parameter | `(K,)` |
+| `beta` | Posterior precision of mean | `(K,)` |
+| `m` | Posterior mean vectors | `(K, D)` |
+| `nu` | Posterior degrees of freedom | `(K,)` |
+| `W_inv` | Posterior scale matrices (inverse) | `(K, D, D)` |
+| `r` | Responsibility (cluster assignment probability) | `(N, K)` |
 
   ### 参考文献
 [1] Microsoft,"Azure Kinect DK",(URL:https://azure.microsoft.com/ja-jp/products/kinect-dk/?msockid=286607017653682f2561121677ca69fe).access:2026/01/13
