@@ -67,7 +67,7 @@ Mステップのように分布を決定するにはq_1を固定し，q_2を動�
 
   $$N_j = \sum_{i=1}^N r_{ij}\qquad\qquad$$
 
-  $$\bar{\boldsymbol{x}}j = \dfrac{1}{N_j} \sum_{i=1}^N r_{ij}\boldsymbol{x}_i\\quad$$
+  $$\bar{\boldsymbol{x_j}}  = \dfrac{1}{N_j} \sum_{i=1}^N r_{ij}\boldsymbol{x}_i\\quad = {r_j}^T\boldsymbol{x}\_{1:N}$$
   
   $$\Sigma_j = \dfrac{1}{N_j} \sum_{i=1}^N r_{ij}(\boldsymbol{x}_i - \bar{\boldsymbol{x}}_j)(\boldsymbol{x}_i - \bar{\boldsymbol{x}}_j)^\top$$
   
