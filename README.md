@@ -38,11 +38,14 @@ python3 VariationalInferenceForBayesianGaussianMixturModel.py
 
 $$p(\boldsymbol{\pi},\boldsymbol{\mu}_{1:K},\mathbf{\Lambda}_{1:K},k_{1:N}|\boldsymbol{x}_{1:N})$$  
 
-と分布を決定する分布の事後分布
+と分布を決定する分布の分布
 
 $$p(r_{ij},\boldsymbol{m}_j,\beta_{j},W_{j},\nu_{j},\alpha_j)$$
 
-ここでiはデータの数($i= 0,1,2 \dots N$), j はガウス分布の数($ j= 0,1,2 ... K$)， pi はクラスタにデータがいる確率， nu_1:K は分布の平均値 Lambda_1:K は精度行列, k はクラスタ数， r_ij は i 番目のデータ x_i が j 番目のクラスタに所属する確率分布，m_j は分布の分布の中心，W_j , beta_j , nu_j は精度行列 Lambda_j を決定するウィシャート分布 の基準行列とそのパラメータ，alpha_j は pi_1:K を示す[4]．
+
+ここでiはデータの数(i= 0,1,2 ... N), j はガウス分布の数( j= 0,1,2 ... K)， pi はクラスタにデータがいる確率， nu_1:K は分布の平均値 Lambda_1:K は精度行列, k はクラスタ数， r_ij は i 番目のデータ x_i が j 番目のクラスタに所属する確率分布，m_j は分布の分布の中心，W_j , beta_j , nu_j は精度行列 Lambda_j を決定するウィシャート分布 の基準行列とそのパラメータ，alpha_j は pi_1:K を示す[4]．
+
+*数式の下付き文字とMarkdownの _斜体_ が干渉を起こし文中の数式が打てないため，文中は(f_a)のように記載する．
 
 ---
 
@@ -57,6 +60,8 @@ Mステップのように分布を決定するにはq_1を固定し，q_2を動�
 下記に各ステップの具体的なアルゴリズムを示す．
 
 #### 初期値を決定
+事前分布のパラメータ( r_ij , m_j , beta_j , W_j , nu_j , alpha_j )の初期値（ r'_ij , m'_j , beta'_j , W'_j , nu'_j , alpha'_j ）を決定する
+
 #### Mstep
 - 以下の式に従って事後分布m_1:K, beta_1:K, W_1:K, nu_1:K, alpha_1:Kを決定する．以下の数式の解説は[3]参照
 
