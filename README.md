@@ -86,7 +86,7 @@ $$\quad+ \dfrac{1}{2} \sum_{h=1}^d \psi\left(\dfrac{\nu_j + 1 - h}{2}\right) + \
 $$\quad+\psi(\alpha_j) - \psi\left( \sum_{j=1}^K \alpha_j \right)$$
 
 
-決定したr_ijを用いてMstepへ
+決定したr_ijを用いてMstepに戻る
 
 ---
 
@@ -151,7 +151,7 @@ $$\quad+\psi(\alpha_j) - \psi\left( \sum_{j=1}^K \alpha_j \right)$$
 
 
 ## LLMの利用について
-ノイズ除去の判定法・描画・初期値のパラメータ設定にChat GPTまたは，Geminiを利用した．
+ノイズ除去の判定法・描画・初期値のパラメータ設定にChat GPTとGeminiを利用した．
 
 
 ---
