@@ -33,7 +33,7 @@ Mステップのように分布を決定するにはq_1を固定し，q_2を動�
 #### 初期値を決定
 #### Mstep
 - 以下の式に従って事後分布m_1:K, beta_1:K, W_1:K, nu_1:K, alpha_1:Kを決定する．以下の数式の解説は[3]参照
-  
+
   $$N_j = \sum_{i=1}^N r_{ij}\qquad\qquad$$
 
   $$\bar{\boldsymbol{x}}j = \dfrac{1}{N_j} \sum_{i=1}^N r_{ij}\boldsymbol{x}_i\\quad$$
@@ -50,7 +50,14 @@ Mステップのように分布を決定するにはq_1を固定し，q_2を動�
 #### Estep
 - 以下の式に従ってr_ijを決定する．以下の数式の解説は[3]参照
  E_stepの1行目のマハラノビス距離^2である（ x_i - m_j ） ^ T W_j（ x_i - m_j ）は2次形式よりΣ^n (（ x_i - m_j ）_n・ W_inv・（ x_i - m_j ）_n)が導出できるため，実装にはこれを利用した．
-<img width="646" height="172" alt="image" src="https://github.com/user-attachments/assets/684fa193-6e28-477a-b907-65ef3a088968" />
+
+$$r_{ij} = \eta \rho_{ij}$$
+  
+$$\log_e \rho_{ij} = -\dfrac{1}{2} d \beta_j^{-1} -\dfrac{1}{2} \nu_j(\boldsymbol{x}_i - \boldsymbol{m}_j)^\top W_j (\boldsymbol{x}_i - \boldsymbol{m}_j)$$
+         
+$$\quad+ \dfrac{1}{2} \sum_{h=1}^d \psi\left(\dfrac{\nu_j + 1 - h}{2}\right) + \dfrac{1}{2}\log_e | W_j | + \eta'$$
+        
+$$\quad+\psi(\alpha_j) - \psi\left( \sum_{j=1}^K \alpha_j \right)$$
 
 
 決定したr_ijを用いてMstepへ
@@ -109,13 +116,12 @@ python3 VariationalInferenceForBayesianGaussianMixturModel.py
 
 
 ## LLMの利用について
-本課題では，変分推論のアルゴリズムの実装がメインであったため
 ノイズ除去の判定法・描画・初期値のパラメータ設定はChat GPTまたは，Geminiを利用した．
 
 
 
   ### 参考文献
-  以下に参考にしたサイトおよび書籍を記載する．主に，書籍[3],講義資料[4],コード[6]を参考に実装を行いました．
+  以下に参考にしたサイトおよび書籍を記載する．主に，書籍[3],講義資料[4],コード[6]を参考に実装を行った．
   
 [1] Microsoft,"Azure Kinect DK",(URL:https://azure.microsoft.com/ja-jp/products/kinect-dk/?msockid=286607017653682f2561121677ca69fe).accessed:2026/01/13
 
